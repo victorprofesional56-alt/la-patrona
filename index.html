@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La patrona 💖 Panel de Ventas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #ff5c8f;
+    --rosa-claro: #ff8fab;
+    --rosa-suave: #ffe3ec;
+    --rosa-fondo: #fff5f7;
+    --rosa-borde: #ffd0de;
+    --verde: #43b57c;
+    --verde-claro: #e6f7ee;
+    --roja: #e5537a;
+    --texto: #5c3345;
+    --texto-suave: #a8768c;
+    --sombra: 0 8px 24px rgba(255, 92, 143, 0.18);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Quicksand', -apple-system, sans-serif;
+    background: linear-gradient(180deg, #fff5f7 0%, #ffeaf0 100%);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  header {
+    background: linear-gradient(120deg, #ff7aac, #ff5c8f);
+    color: #fff;
+    text-align: center;
+    padding: 26px 16px 20px;
+    border-radius: 0 0 28px 28px;
+    box-shadow: var(--sombra);
+  }
+  header h1 { font-size: 30px; letter-spacing: 1px; }
+  header p { font-size: 14px; opacity: .92; margin-top: 4px; }
+  header .logo {
+    width: 110px; height: 110px; display: block; margin: 0 auto 8px;
+    border-radius: 50%; background: #fff; padding: 6px;
+    box-shadow: 0 6px 18px rgba(255, 92, 143, .35);
+  }
+  .fecha-hoy {
+    margin-top: 12px; display: inline-block; background: rgba(255,255,255,.25);
+    padding: 6px 18px; border-radius: 50px; font-size: 13px;
+  }
+
+  nav {
+    display: flex; justify-content: center; gap: 10px;
+    flex-wrap: wrap; padding: 18px 12px;
+  }
+  nav button {
+    font-family: inherit; font-size: 14px; font-weight: 700;
+    border: none; cursor: pointer;
+    padding: 10px 22px; border-radius: 50px;
+    background: #fff; color: var(--texto-suave);
+    box-shadow: 0 3px 10px rgba(255, 92, 143, .12);
+    transition: .2s;
+  }
+  nav button:hover { color: var(--rosa); }
+  nav button.activo { background: var(--rosa-claro); color: #fff; box-shadow: var(--sombra); }
+
+  main { max-width: 880px; margin: 0 auto; padding: 0 14px 60px; }
+  .seccion { display: none; }
+  .seccion.activa { display: block; }
+
+  .tarjeta {
+    background: #fff; border-radius: 20px;
+    padding: 20px; margin-top: 18px;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--rosa-borde);
+  }
+  .tarjeta h2 { font-size: 20px; margin-bottom: 14px; }
+
+  .resumen {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px; margin-top: 18px;
+  }
+  .carta-resumen {
+    background: #fff; border-radius: 20px; padding: 18px;
+    text-align: center; box-shadow: var(--sombra);
+    border: 1px solid var(--rosa-borde);
+  }
+  .carta-resumen .icono { font-size: 28px; }
+  .carta-resumen .etiqueta { font-size: 13px; color: var(--texto-suave); margin: 6px 0; }
+  .carta-resumen .monto { font-size: 26px; font-weight: 700; }
+  .carta-resumen.venta .monto { color: var(--rosa); }
+  .carta-resumen.gasto .monto { color: var(--roja); }
+  .carta-resumen.total {
+    background: linear-gradient(135deg, #ff7aac, #ff5c8f); color: #fff;
+  }
+  .carta-resumen.total .monto { color: #fff; }
+  .carta-resumen.total .etiqueta { color: rgba(255,255,255,.95); }
+  .destacado {
+    text-align: center; margin-top: 16px; font-size: 15px;
+    color: var(--texto-suave); font-weight: 600;
+  }
+
+  .lista-movs { list-style: none; }
+  .lista-movs li {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    padding: 11px 14px; border-radius: 14px; background: var(--rosa-fondo);
+    margin-bottom: 8px; border: 1px solid var(--rosa-borde);
+    flex-wrap: wrap;
+  }
+  .lista-movs li .hora { font-size: 12px; color: var(--texto-suave); }
+  .verde { color: var(--verde); font-weight: 700; }
+  .rojo { color: var(--roja); font-weight: 700; }
+
+  .form-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; align-items: end;
+  }
+  .campo label {
+    display: block; font-size: 12px; font-weight: 700;
+    color: var(--texto-suave); margin-bottom: 5px;
+  }
+  .campo input, .campo select {
+    width: 100%; padding: 10px 12px; font-size: 14px;
+    border: 2px solid var(--rosa-borde); border-radius: 12px;
+    font-family: inherit; background: #fff; color: var(--texto);
+    outline: none; transition: border-color .2s;
+  }
+  .campo input:focus, .campo select:focus { border-color: var(--rosa); }
+
+  .boton {
+    font-family: inherit; font-weight: 700; font-size: 14px;
+    border: none; cursor: pointer; border-radius: 50px;
+    padding: 11px 20px; color: #fff;
+    background: linear-gradient(120deg, #ff7aac, #ff5c8f);
+    box-shadow: 0 6px 16px rgba(255, 92, 143, .35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .boton:hover { transform: translateY(-2px); }
+  .boton:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .boton.suave { background: var(--rosa-claro); }
+  .boton-verde { background: var(--verde); box-shadow: 0 6px 16px rgba(67,181,124,.3); }
+  .boton-rojo { background: var(--roja); box-shadow: 0 6px 16px rgba(229,83,122,.3); }
+  .boton.pequeno { padding: 6px 12px; font-size: 12px; box-shadow: none; }
+
+  .fila-botones { display: flex; gap: 8px; }
+  .fila-botones.mt { margin-top: 14px; }
+  .alinear-derecha { margin-left: auto; }
+
+  .tabla-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 520px; }
+  thead th {
+    text-align: left; font-size: 12px; color: var(--texto-suave);
+    padding: 8px 10px; border-bottom: 2px solid var(--rosa-borde);
+  }
+  tbody td {
+    padding: 12px 10px; border-bottom: 1px solid var(--rosa-fondo);
+    font-size: 14px;
+  }
+  tbody tr:hover td { background: var(--rosa-fondo); }
+
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 50px;
+    font-size: 12px; font-weight: 700;
+  }
+  .badge.unidad { background: var(--rosa-claro); color: #fff; }
+  .badge.stock { background: var(--verde-claro); color: var(--verde); }
+  .badge.bajo { background: #ffe3e6; color: var(--roja); }
+
+  .aviso {
+    display: none; padding: 12px 16px; border-radius: 14px;
+    font-size: 14px; font-weight: 700; margin-top: 14px;
+  }
+  .aviso.ok { display: block; background: var(--verde-claro); color: var(--verde); }
+  .aviso.error { display: block; background: #ffe3e6; color: var(--roja); }
+
+  .aviso-vacio { text-align: center; color: var(--texto-suave); padding: 18px 0; font-size: 14px; }
+
+  #resumen-seleccion {
+    font-weight: 700; color: var(--rosa); font-size: 15px; margin-top: 10px; text-align: center;
+    min-height: 18px;
+  }
+
+  .totales-dia {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 12px; margin-top: 10px; border-top: 2px dashed var(--rosa-borde);
+    font-size: 15px; font-weight: 700;
+  }
+  .totales-dia span:last-child { color: var(--rosa); }
+
+  footer { text-align: center; padding: 20px; color: var(--texto-suave); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo-hamster.svg" alt="La patrona 🐹" class="logo">
+  <h1>La patrona</h1>
+  <p>Tu panel dulce de ventas del día</p>
+  <span class="fecha-hoy" id="fecha-hoy"></span>
+</header>
+
+<nav>
+  <button class="activo" data-seccion="dashboard">Dashboard</button>
+  <button data-seccion="inventario">Inventario</button>
+  <button data-seccion="ventas">Ventas</button>
+  <button data-seccion="gastos">Gastos</button>
+</nav>
+
+<main>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="seccion activa" id="seccion-dashboard">
+    <div class="resumen">
+      <div class="carta-resumen venta">
+        <div class="icono">🛍️</div>
+        <div class="etiqueta">Ventas de hoy</div>
+        <div class="monto" id="dash-ventas">$0.00</div>
+      </div>
+      <div class="carta-resumen gasto">
+        <div class="icono">💸</div>
+        <div class="etiqueta">Gastos de hoy</div>
+        <div class="monto" id="dash-gastos">$0.00</div>
+      </div>
+      <div class="carta-resumen total">
+        <div class="icono">💰</div>
+        <div class="etiqueta">Total del día (ingresos − gastos)</div>
+        <div class="monto" id="dash-total">$0.00</div>
+      </div>
+    </div>
+    <div class="destacado">Este total debe coincidir con lo que tienes en mano al cerrar el día 🌟</div>
+
+    <div class="tarjeta">
+      <h2>🧁 Ventas registradas hoy</h2>
+      <div id="ventas-resumen-vacio" class="aviso-vacio">Aún no hay ventas hoy.</div>
+      <ul class="lista-movs" id="lista-ventas-resumen"></ul>
+    </div>
+    <div class="tarjeta">
+      <h2>📋 Gastos de hoy</h2>
+      <div id="gastos-resumen-vacio" class="aviso-vacio">Hoy no has registrado gastos. 💖</div>
+      <ul class="lista-movs" id="lista-gastos-resumen"></ul>
+    </div>
+  </section>
+
+  <!-- ============ INVENTARIO ============ -->
+  <section class="seccion" id="seccion-inventario">
+    <div class="tarjeta">
+      <h2 id="titulo-form-prod">🍬 Agregar producto</h2>
+      <div class="form-grid">
+        <div class="campo">
+          <label>Nombre del producto</label>
+          <input type="text" id="prod-nombre" placeholder="Ej. Pan de elote">
+        </div>
+        <div class="campo">
+          <label>Unidad de medida</label>
+          <select id="prod-unidad">
+            <option value="piezas">Piezas</option>
+            <option value="kg">Kg</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Precio por pieza o kg ($)</label>
+          <input type="number" id="prod-precio" placeholder="0.00" min="0" step="0.01">
+        </div>
+        <div class="campo">
+          <label>Stock actual</label>
+          <input type="number" id="prod-stock" placeholder="0" min="0" step="0.5">
+        </div>
+      </div>
+      <div class="fila-botones mt">
+        <button class="boton" id="btn-guardar-prod">❤️ Agregar</button>
+        <button class="boton boton-verde" id="btn-cancelar-prod" style="display:none">Cancelar</button>
+      </div>
+      <div class="aviso" id="aviso-inv"></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>🧺 Tu inventario</h2>
+      <div class="tabla-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Unidad</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-inventario"></tbody>
+        </table>
+      </div>
+      <div id="inventario-vacio" class="aviso-vacio">Aún no tienes productos. Agrega el primero arriba ✨</div>
+    </div>
+  </section>
+
+  <!-- ============ VENTAS ============ -->
+  <section class="seccion" id="seccion-ventas">
+    <div class="tarjeta">
+      <h2>🛒 Registrar una venta</h2>
+      <div class="form-grid">
+        <div class="campo">
+          <label>Producto</label>
+          <select id="venta-producto"></select>
+        </div>
+        <div class="campo">
+          <label>Cantidad vendida</label>
+          <input type="number" id="venta-cantidad" placeholder="1" min="0" step="1">
+        </div>
+      </div>
+      <div id="resumen-seleccion"></div>
+      <div class="fila-botones mt">
+        <button class="boton" id="btn-venta" disabled>💖 Registrar venta</button>
+      </div>
+      <div class="aviso" id="aviso-venta"></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>🧁 Ventas de hoy</h2>
+      <div id="ventas-vacio" class="aviso-vacio">Hoy aún no registras ventas.</div>
+      <ul class="lista-movs" id="lista-ventas"></ul>
+      <div class="totales-dia mt">
+        <span>Total de ventas del día</span>
+        <span id="total-ventas-dia"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GASTOS ============ -->
+  <section class="seccion" id="seccion-gastos">
+    <div class="tarjeta">
+      <h2>📋 Agregar un gasto</h2>
+      <div class="form-grid">
+        <div class="campo">
+          <label>¿En qué gastaste?</label>
+          <input type="text" id="gasto-concepto" placeholder="Ej. Harina, mantequilla…">
+        </div>
+        <div class="campo">
+          <label>Monto ($)</label>
+          <input type="number" id="gasto-monto" placeholder="0.00" min="0" step="0.01">
+        </div>
+      </div>
+      <div class="fila-botones mt">
+        <button class="boton" id="btn-gasto">💾 Registrar gasto</button>
+      </div>
+      <div class="aviso" id="aviso-gasto"></div>
+    </div>
+
+    <div class="tarjeta">
+      <h2>🧾 Gastos de hoy</h2>
+      <div id="gastos-vacio" class="aviso-vacio">Hoy no has registrado gastos. 💖</div>
+      <ul class="lista-movs" id="lista-gastos"></ul>
+      <div class="totales-dia mt">
+        <span>Total de gastos del día</span>
+        <span id="total-gastos-dia"></span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Hecho con 💗 para La patrona · tus datos se guardan automáticamente en este navegador</footer>
+
+<script>
+"use strict";
+
+/* ============ DATOS (localStorage) ============ */
+var KEY = "laPatronaDatos";
+
+function crearTienda() {
+  return { productos: [], ventas: [], gastos: [] };
+}
+
+function cargar() {
+  try {
+    var guardado = localStorage.getItem(KEY);
+    if (guardado) {
+      var d = JSON.parse(guardado);
+      if (d && Array.isArray(d.productos) && Array.isArray(d.ventas) && Array.isArray(d.gastos)) {
+        return d;
+      }
+    }
+  } catch (e) { /* datos corruptos: empezamos de nuevo */ }
+  return crearTienda();
+}
+
+var tienda = cargar();
+
+/* Primer uso: agregamos algunos productos de ejemplo para que se vea la app viva */
+(function sembrar() {
+  if (!localStorage.getItem(KEY) && tienda.productos.length === 0) {
+    tienda.productos = [
+      { id: nuevaId(), nombre: "Pan de elote", unidad: "piezas", precio: 15, stock: 150 },
+      { id: nuevaId(), nombre: "Galletas de coco", unidad: "piezas", precio: 8, stock: 50 },
+      { id: nuevaId(), nombre: "Ate de membrillo", unidad: "kg", precio: 140, stock: 5 },
+      { id: nuevaId(), nombre: "Flan de cajeta", unidad: "piezas", precio: 25, stock: 30 }
+    ];
+  }
+})();
+
+function guardar() {
+  localStorage.setItem(KEY, JSON.stringify(tienda));
+}
+
+/* ============ UTILIDADES ============ */
+function formatearPes(n) {
+  return n.toLocaleString("es-MX", { style: "currency", currency: "MXN", minimumFractionDigits: 2 });
+}
+function esc(s) {
+  var div = document.createElement("div");
+  div.textContent = s == null ? "" : String(s);
+  return div.innerHTML;
+}
+function nuevaId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+function sumar(arr) {
+  return arr.reduce(function (a, b) { return a + b; }, 0);
+}
+function horaCorta(ts) {
+  var f = new Date(ts);
+  var ampm = f.getHours() >= 12 ? "pm" : "am";
+  var h = f.getHours() % 12; if (h === 0) h = 12;
+  return h + ":" + ("0" + f.getMinutes()).slice(-2) + " " + ampm;
+}
+function pedirRangoDelDia(fecha) {
+  var f = new Date(fecha);
+  var inicio = new Date(f);
+  inicio.setHours(0, 0, 0, 0);
+  var fin = new Date(f);
+  fin.setHours(23, 59, 59, 999);
+  return { inicio: inicio.getTime(), fin: fin.getTime() };
+}
+function buscarProducto(id) {
+  return tienda.productos.find(function (p) { return p.id === id; });
+}
+function buscarProductoPorNombre(nombre) {
+  return tienda.productos.find(function (p) { return p.nombre === nombre; });
+}
+
+/* ============ MOVIMIENTOS DEL DÍA ============ */
+function ventasDeHoy() {
+  var r = pedirRangoDelDia(new Date());
+  return tienda.ventas.filter(function (v) {
+    return v.timestamp >= r.inicio && v.timestamp <= r.fin;
+  });
+}
+function gastosDeHoy() {
+  var r = pedirRangoDelDia(new Date());
+  return tienda.gastos.filter(function (g) {
+    return g.timestamp >= r.inicio && g.timestamp <= r.fin;
+  });
+}
+function totalVentasHoy() { return sumar(ventasDeHoy().map(function (v) { return v.total; })); }
+function totalGastosHoy() { return sumar(gastosDeHoy().map(function (g) { return g.monto; })); }
+
+/* ============ NAVEGACIÓN ============ */
+var secciones = {
+  dashboard: document.getElementById("seccion-dashboard"),
+  inventario: document.getElementById("seccion-inventario"),
+  ventas: document.getElementById("seccion-ventas"),
+  gastos: document.getElementById("seccion-gastos")
+};
+
+document.querySelectorAll("nav button").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll("nav button").forEach(function (b) { b.classList.remove("activo"); });
+    btn.classList.add("activo");
+    Object.keys(secciones).forEach(function (k) {
+      secciones[k].classList.toggle("activa", k === btn.dataset.seccion);
+    });
+    render(btn.dataset.seccion);
+  });
+});
+
+function render(seccion) {
+  actualizarFecha();
+  pintarDashboard();
+  pintarInventario();
+  pintarSelectVentas();
+  pintarVentas();
+  pintarGastos();
+  if (seccion === "ventas") actualizarResumenVenta();
+}
+
+function actualizarFecha() {
+  var f = new Date();
+  document.getElementById("fecha-hoy").textContent =
+    f.toLocaleDateString("es-MX", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+}
+
+/* ============ DASHBOARD ============ */
+function pintarDashboard() {
+  var v = totalVentasHoy();
+  var g = totalGastosHoy();
+  document.getElementById("dash-ventas").textContent = formatearPes(v);
+  document.getElementById("dash-gastos").textContent = formatearPes(g);
+  document.getElementById("dash-total").textContent = formatearPes(v - g);
+
+  var vs = ventasDeHoy().slice().reverse();
+  var gs = gastosDeHoy().slice().reverse();
+
+  document.getElementById("ventas-resumen-vacio").style.display = vs.length ? "none" : "block";
+  document.getElementById("lista-ventas-resumen").innerHTML = vs.map(function (v2) {
+    return "<li><span>" + esc(v2.producto) + " · " + v2.cantidad + " " + esc(v2.unidad) +
+      "</span><span class=\"hora\"><span class=\"verde\">" + formatearPes(v2.total) + "</span> · " + horaCorta(v2.timestamp) + "</span></li>";
+  }).join("");
+
+  document.getElementById("gastos-resumen-vacio").style.display = gs.length ? "none" : "block";
+  document.getElementById("lista-gastos-resumen").innerHTML = gs.map(function (g) {
+    return '<li><span>' + esc(g.concepto) +
+      "</span><span class=\"hora\"><span class=\"rojo\">" + formatearPes(g.monto) + "</span> · " + horaCorta(g.timestamp) + "</span></li>";
+  }).join("");
+}
+
+/* ============ INVENTARIO ============ */
+var editandoProductoId = null;
+
+function pintarInventario() {
+  var tbody = document.getElementById("tabla-inventario");
+  tbody.innerHTML = tienda.productos.map(function (p) {
+    var stockBadge = p.stock <= 0
+      ? '<span class="badge bajo">Sin existencias</span>'
+      : '<span class="badge stock">' + p.stock + ' ' + esc(p.unidad) + "</span>";
+    return "<tr>" +
+      "<td><strong>" + esc(p.nombre) + "</strong></td>" +
+      '<td><span class="badge unidad">' + (p.unidad === "kg" ? "Kg" : "Piezas") + "</span></td>" +
+      "<td>" + formatearPes(p.precio) + "</td>" +
+      "<td>" + stockBadge + "</td>" +
+      '<td><div class="fila-botones">' +
+        '<button class="boton suave pequeno" data-accion="editar" data-id="' + p.id + '">Editar</button>' +
+        '<button class="boton boton-rojo pequeno" data-accion="eliminar" data-id="' + p.id + '">Eliminar</button>' +
+      "</div></td>" +
+    "</tr>";
+  }).join("");
+  document.getElementById("inventario-vacio").style.display = tienda.productos.length ? "none" : "block";
+}
+
+function agregarProducto() {
+  var nombre = document.getElementById("prod-nombre").value.trim();
+  var unidad = document.getElementById("prod-unidad").value;
+  var precio = parseFloat(document.getElementById("prod-precio").value);
+  var stock = parseFloat(document.getElementById("prod-stock").value);
+
+  if (!nombre) { mostrarAviso("aviso-inv", "Vamos, escribe el nombre del producto 💕", false); return; }
+  if (isNaN(precio) || precio < 0) { mostrarAviso("aviso-inv", "Pon un precio válido en $", false); return; }
+  if (isNaN(stock) || stock < 0) { stock = 0; }
+
+  if (editandoProductoId) {
+    var p = buscarProducto(editandoProductoId);
+    if (p) {
+      p.nombre = nombre;
+      p.unidad = unidad;
+      p.precio = precio;
+      p.stock = stock;
+    }
+    terminarEdicion();
+    mostrarAviso("aviso-inv", "Producto actualizado 🎉", true);
+  } else {
+    tienda.productos.push({ id: nuevaId(), nombre: nombre, unidad: unidad, precio: precio, stock: stock });
+    mostrarAviso("aviso-inv", "Producto agregado 🎉", true);
+  }
+  limpiarFormProducto();
+  guardar();
+  render();
+}
+
+function editarProducto(id) {
+  var p = buscarProducto(id);
+  if (!p) return;
+  editandoProductoId = id;
+  document.getElementById("prod-nombre").value = p.nombre;
+  document.getElementById("prod-unidad").value = p.unidad;
+  document.getElementById("prod-precio").value = p.precio;
+  document.getElementById("prod-stock").value = p.stock;
+  document.getElementById("titulo-form-prod").textContent = "🍬 Editando: " + p.nombre;
+  document.getElementById("btn-guardar-prod").textContent = "💾 Guardar cambios";
+  document.getElementById("btn-cancelar-prod").style.display = "inline-block";
+  document.getElementById("seccion-inventario").scrollIntoView({ behavior: "smooth" });
+}
+
+function cancelarEdicion() {
+  editandoProductoId = null;
+  limpiarFormProducto();
+  document.getElementById("titulo-form-prod").textContent = "🍬 Agregar producto";
+  document.getElementById("btn-guardar-prod").textContent = "❤️ Agregar";
+  document.getElementById("btn-cancelar-prod").style.display = "none";
+}
+
+function terminarEdicion() {
+  editandoProductoId = null;
+  document.getElementById("titulo-form-prod").textContent = "🍬 Agregar producto";
+  document.getElementById("btn-guardar-prod").textContent = "❤️ Agregar";
+  document.getElementById("btn-cancelar-prod").style.display = "none";
+}
+
+function eliminarProducto(id) {
+  if (confirm("¿Segura que quieres eliminar este producto?")) {
+    tienda.productos = tienda.productos.filter(function (p) { return p.id !== id; });
+    guardar();
+    render();
+  }
+}
+
+function limpiarFormProducto() {
+  document.getElementById("prod-nombre").value = "";
+  document.getElementById("prod-precio").value = "";
+  document.getElementById("prod-stock").value = "";
+  document.getElementById("prod-unidad").value = "piezas";
+}
+
+/* ============ VENTAS ============ */
+function pintarSelectVentas() {
+  var select = document.getElementById("venta-producto");
+  select.innerHTML = "";
+  tienda.productos.forEach(function (p) {
+    var opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.nombre + " — $" + p.precio.toLocaleString("es-MX") + " / " + (p.unidad === "kg" ? "kg" : "pieza");
+    select.appendChild(opt);
+  });
+  if (!tienda.productos.length) {
+    var optVacio = document.createElement("option");
+    optVacio.value = "";
+    optVacio.textContent = "Primero agrega productos en Inventario";
+    select.appendChild(optVacio);
+  }
+  actualizarResumenVenta();
+}
+
+function actualizarResumenVenta() {
+  var pId = document.getElementById("venta-producto").value;
+  var p = buscarProducto(pId);
+  var caja = document.getElementById("resumen-seleccion");
+  var btn = document.getElementById("btn-venta");
+  if (!p) {
+    caja.textContent = "";
+    btn.disabled = true;
+    return;
+  }
+  var cantidad = parseFloat(document.getElementById("venta-cantidad").value);
+  var valida = !isNaN(cantidad) && cantidad > 0;
+  caja.textContent = "Stock disponible: " + p.stock + " " + (p.unidad === "kg" ? "kg" : "piezas") +
+    (valida ? "  ·  Subtotal: " + formatearPes(cantidad * p.precio) : "");
+  btn.disabled = !valida;
+}
+
+function registrarVenta() {
+  var pId = document.getElementById("venta-producto").value;
+  var p = buscarProducto(pId);
+  var cantidad = parseFloat(document.getElementById("venta-cantidad").value);
+  if (!p) { mostrarAviso("aviso-venta", "Elige primero un producto 💕", false); return; }
+  if (isNaN(cantidad) || cantidad <= 0) { mostrarAviso("aviso-venta", "Pon la cantidad que vendiste", false); return; }
+  if (cantidad * p.precio <= 0) { mostrarAviso("aviso-venta", "El precio del producto no puede ser $0", false); return; }
+
+  tienda.ventas.push({
+    id: nuevaId(),
+    timestamp: Date.now(),
+    producto: p.nombre,
+    unidad: p.unidad,
+    cantidad: cantidad,
+    precio: p.precio,
+    total: cantidad * p.precio
+  });
+  p.stock = Math.max(0, p.stock - cantidad);
+  document.getElementById("venta-cantidad").value = "";
+  mostrarAviso("aviso-venta", "¡Venta registrada! 🧁", true);
+  guardar();
+  render("ventas");
+}
+
+function eliminarVenta(id) {
+  var v = tienda.ventas.find(function (x) { return x.id === id; });
+  if (!v) return;
+  var p = buscarProductoPorNombre(v.producto);
+  if (p) { p.stock += v.cantidad; }
+  tienda.ventas = tienda.ventas.filter(function (x) { return x.id !== id; });
+  guardar();
+  render("ventas");
+}
+
+function pintarVentas() {
+  var vs = ventasDeHoy().slice().reverse();
+  document.getElementById("ventas-vacio").style.display = vs.length ? "none" : "block";
+  document.getElementById("lista-ventas").innerHTML = vs.map(function (v) {
+    return '<li>' +
+      "<span>" + esc(v.producto) + " · " + v.cantidad + " " + esc(v.unidad) + "</span>" +
+      '<span style="display:flex;align-items:center;gap:10px">' +
+        '<span class="hora">' + horaCorta(v.timestamp) + "</span>" +
+        '<span class="verde">' + formatearPes(v.total) + '</span>' +
+        '<button class="boton boton-rojo pequeno" data-id="' + v.id + '">Quitar</button>' +
+      "</span>" +
+    "</li>";
+  }).join("");
+  document.getElementById("total-ventas-dia").textContent = formatearPes(totalVentasHoy());
+}
+
+/* ============ GASTOS ============ */
+function registrarGasto() {
+  var concepto = document.getElementById("gasto-concepto").value.trim();
+  var monto = parseFloat(document.getElementById("gasto-monto").value);
+  if (!concepto) { mostrarAviso("aviso-gasto", "Escribe en qué gastaste 💕", false); return; }
+  if (isNaN(monto) || monto <= 0) { mostrarAviso("aviso-gasto", "Pon un monto válido en $", false); return; }
+  tienda.gastos.push({ id: nuevaId(), timestamp: Date.now(), concepto: concepto, monto: monto });
+  document.getElementById("gasto-concepto").value = "";
+  document.getElementById("gasto-monto").value = "";
+  mostrarAviso("aviso-gasto", "Gasto registrado 📋", true);
+  guardar();
+  render("gastos");
+}
+
+function eliminarGasto(id) {
+  tienda.gastos = tienda.gastos.filter(function (g) { return g.id !== id; });
+  guardar();
+  render("gastos");
+}
+
+function pintarGastos() {
+  var gs = gastosDeHoy().slice().reverse();
+  document.getElementById("gastos-vacio").style.display = gs.length ? "none" : "block";
+  document.getElementById("lista-gastos").innerHTML = gs.map(function (g) {
+    return "<li>" +
+      "<span>" + esc(g.concepto) + "</span>" +
+      '<span style="display:flex;align-items:center;gap:10px">' +
+        '<span class="hora">' + horaCorta(g.timestamp) + "</span>" +
+        '<span class="rojo">' + formatearPes(g.monto) + '</span>' +
+        '<button class="boton boton-rojo pequeno" data-id="' + g.id + '">Quitar</button>' +
+      "</span>" +
+    "</li>";
+  }).join("");
+  document.getElementById("total-gastos-dia").textContent = formatearPes(totalGastosHoy());
+}
+
+/* ============ AVISOS ============ */
+function mostrarAviso(id, texto, esBien) {
+  var el = document.getElementById(id);
+  el.textContent = texto;
+  el.className = "aviso mt " + (esBien ? "ok" : "error");
+  setTimeout(function () {
+    el.className = "aviso";
+    el.textContent = "";
+  }, 2500);
+}
+
+/* ============ EVENTOS ============ */
+document.getElementById("btn-guardar-prod").addEventListener("click", agregarProducto);
+document.getElementById("btn-cancelar-prod").addEventListener("click", cancelarEdicion);
+
+document.getElementById("tabla-inventario").addEventListener("click", function (e) {
+  var btn = e.target.closest("button");
+  if (!btn) return;
+  if (btn.dataset.accion === "editar") editarProducto(btn.dataset.id);
+  if (btn.dataset.accion === "eliminar") eliminarProducto(btn.dataset.id);
+});
+
+document.getElementById("btn-venta").addEventListener("click", registrarVenta);
+document.getElementById("venta-producto").addEventListener("change", actualizarResumenVenta);
+document.getElementById("venta-cantidad").addEventListener("input", actualizarResumenVenta);
+document.getElementById("lista-ventas").addEventListener("click", function (e) {
+  var btn = e.target.closest("button");
+  if (btn && btn.dataset.id) eliminarVenta(btn.dataset.id);
+});
+
+document.getElementById("btn-gasto").addEventListener("click", registrarGasto);
+document.getElementById("lista-gastos").addEventListener("click", function (e) {
+  var btn = e.target.closest("button");
+  if (btn && btn.dataset.id) eliminarGasto(btn.dataset.id);
+});
+
+/* Enter para avanzar más rápido */
+document.getElementById("prod-nombre").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") agregarProducto();
+});
+document.getElementById("gasto-concepto").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") registrarGasto();
+});
+document.getElementById("venta-cantidad").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") registrarVenta();
+});
+
+/* ============ PRIMERA CARGA ============ */
+render("dashboard");
+</script>
+</body>
+</html>

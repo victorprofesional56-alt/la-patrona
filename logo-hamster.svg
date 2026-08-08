@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="fondo" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#ffd9e4"/>
+      <stop offset="100%" stop-color="#ff9fb9"/>
+    </radialGradient>
+    <radialGradient id="pelo" cx="45%" cy="35%" r="95%">
+      <stop offset="0%" stop-color="#f0b36c"/>
+      <stop offset="100%" stop-color="#dc8f4b"/>
+    </radialGradient>
+  </defs>
+
+  <circle cx="100" cy="100" r="96" fill="url(#fondo)"/>
+
+  <!-- Orejas -->
+  <ellipse cx="44" cy="34" rx="17" ry="20" fill="#dc8f4b"/>
+  <ellipse cx="156" cy="34" rx="17" ry="20" fill="#dc8f4b"/>
+  <ellipse cx="44" cy="36" rx="10" ry="13" fill="#ffb6c6"/>
+  <ellipse cx="156" cy="36" rx="10" ry="13" fill="#ffb6c6"/>
+
+  <!-- Cuerpo rechoncho -->
+  <ellipse cx="100" cy="140" rx="64" ry="58" fill="url(#pelo)"/>
+  <!-- Panza -->
+  <ellipse cx="100" cy="148" rx="36" ry="36" fill="#fde9c9"/>
+
+  <!-- Cabeza (unida al cuerpo = una bolita) -->
+  <circle cx="100" cy="63" r="46" fill="url(#pelo)"/>
+
+  <!-- Cachetes bien llenos -->
+  <ellipse cx="56" cy="82" rx="34" ry="30" fill="#e9a75c"/>
+  <ellipse cx="144" cy="82" rx="34" ry="30" fill="#e9a75c"/>
+  <circle cx="100" cy="72" r="34" fill="#e9a75c"/>
+
+  <!-- Hocico crema -->
+  <ellipse cx="100" cy="86" rx="24" ry="15" fill="#fde9c9"/>
+
+  <!-- Rubor -->
+  <ellipse cx="52" cy="84" rx="11" ry="8" fill="#ff9fb5" opacity="0.8"/>
+  <ellipse cx="148" cy="84" rx="11" ry="8" fill="#ff9fb5" opacity="0.8"/>
+
+  <!-- Ojos -->
+  <circle cx="80" cy="52" r="8.5" fill="#43231a"/>
+  <circle cx="120" cy="52" r="8.5" fill="#43231a"/>
+  <circle cx="83" cy="49" r="3.2" fill="#fff"/>
+  <circle cx="123" cy="49" r="3.2" fill="#fff"/>
+
+  <!-- Nariz -->
+  <ellipse cx="100" cy="70" rx="5" ry="4.5" fill="#ff7ea8"/>
+
+  <!-- Dientitos -->
+  <rect x="93.5" y="74" width="5.5" height="7" rx="2" fill="#fff" stroke="#e5c9a0" stroke-width="0.8"/>
+  <rect x="101" y="74" width="5.5" height="7" rx="2" fill="#fff" stroke="#e5c9a0" stroke-width="0.8"/>
+
+  <!-- Bigotes -->
+  <g stroke="#c97a86" stroke-width="2.4" stroke-linecap="round" opacity="0.85">
+    <path d="M30 86 L8 83"/>
+    <path d="M30 92 L7 96"/>
+    <path d="M30 98 L10 104"/>
+  </g>
+  <g stroke="#c97a86" stroke-width="2.4" stroke-linecap="round" opacity="0.85">
+    <path d="M170 86 L192 83"/>
+    <path d="M170 92 L193 96"/>
+    <path d="M170 98 L190 104"/>
+  </g>
+
+  <!-- Patitas que agarran -->
+  <ellipse cx="58" cy="168" rx="13" ry="15" fill="#dc8f4b"/>
+  <ellipse cx="142" cy="168" rx="13" ry="15" fill="#dc8f4b"/>
+
+  <!-- Piecitos -->
+  <ellipse cx="76" cy="190" rx="14" ry="9" fill="#e9b36b"/>
+  <ellipse cx="124" cy="190" rx="14" ry="9" fill="#e9b36b"/>
+
+  <!-- Rabito pequeño -->
+  <circle cx="158" cy="186" r="8" fill="#dc8f4b"/>
+</svg>
